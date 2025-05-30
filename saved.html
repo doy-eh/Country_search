@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Saved Countries</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+    nav {
+      background-color: #222; color: white; padding: 10px 20px;
+      display: flex; gap: 15px;
+    }
+    nav a {
+      color: white; text-decoration: none;
+    }
+    nav a.active {
+      font-weight: bold;
+    }
+    .container { padding: 30px 20px; max-width: 800px; margin: auto; }
+    .card {
+      border: 1px solid #ccc; border-radius: 6px; padding: 20px;
+      margin-top: 20px;
+      position: relative;
+    }
+    .card img {
+      max-width: 150px; margin-bottom: 15px;
+    }
+    .alert {
+      padding: 10px; background-color: #f44336; color: white; margin-top: 20px;
+    }
+    .delete-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background-color: #d9534f;
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      cursor: pointer;
+      border-radius: 3px;
+    }
+    .delete-btn:hover {
+      background-color: #c9302c;
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="search.html">Search</a>
+    <a href="saved.html" class="active">Saved</a>
+  </nav>
+
+  <div class="container">
+    <h2>Saved Countries</h2>
+    <div id="savedList">Loading saved countries...</div>
+  </div>
+
+  <script>
+    function loadSavedCountries() {
+      const savedList = document.getElementById("savedList");
+      savedList.innerHTML = "Loading saved countries...";
+
+      fetch("php/history.php")
+        .then(res => {
+          if (!res.ok) throw new Error("Failed to fetch saved countries");
+          return res.json();
+        })
+        .then(data => {
+          if (data.length === 0) {
+            savedList.innerHTML = "<p>No saved countries yet.</p>";
+            return;
+          }
+
+          savedList.innerHTML = "";
+          data.forEach(country => {
+            savedList.innerHTML += `
+              <div class="card">
+                <h3>${country.name}</h3>
+                <img src="${country.flag_url}" alt="${country.name} flag" />
+                <p><strong>Capital:</strong> ${country.capital || "N/A"}</p>
+                <p><strong>Region:</strong> ${country.region || "N/A"}</p>
+                <button class="delete-btn" onclick="deleteCountry(${country.id})">Delete</button>
+              </div>
+            `;
+          });
+        })
+        .catch(() => {
+          savedList.innerHTML = `<div class="alert">Failed to load saved countries.</div>`;
+        });
+    }
+
+    function deleteCountry(id) {
+      if (!confirm("Are you sure you want to delete this country?")) return;
+
+      fetch("php/delete.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          alert(data.message);
+          loadSavedCountries(); // Refresh list
+        } else {
+          alert(data.error || "Failed to delete country.");
+        }
+      })
+      .catch(() => alert("Error deleting country."));
+    }
+
+    document.addEventListener("DOMContentLoaded", loadSavedCountries);
+  </script>
+
+</body>
+</html>

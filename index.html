@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Country Info - Home</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    nav {
+      background-color: #222;
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      gap: 15px;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+    }
+    nav a.active {
+      font-weight: bold;
+    }
+    .container {
+      padding: 30px 20px;
+      max-width: 800px;
+      margin: auto;
+      text-align: center;
+    }
+    .search-btn {
+      margin-top: 30px;
+    }
+    .search-btn button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .search-btn button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="active">Home</a>
+    <a href="saved.html">Saved</a>
+  </nav>
+  <div class="container">
+    <h1>Welcome to the Country Info App</h1>
+    <p>Use the Search page to find countries and save your favorites.</p>
+    <p>Visit the Saved page to see your saved countries.</p>
+
+   
+    <div class="search-btn">
+      <a href="search.html">
+        <button>Go to Search</button>
+      </a>
+    </div>
+  </div>
+</body>
+</html>
